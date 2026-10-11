@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Piensalo Bien</title>
+  <link rel="apple-touch-icon" href="assets/app_icon.png">
+  <link rel="icon" type="image/png" href="assets/app_icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="orientation-blocker">
+    <div class="blocker-content">
+      <h2>🔄 Ruota in Orizzontale</h2>
+    </div>
+  </div>
+
+
+
+  <div id="app">
+    <!-- 1. ONBOARDING -->
+    <div id="screen-onboarding" class="screen active">
+      <div class="welcome-container">
+        <img src="assets/menu_in.png" alt="Piensalo Bien" class="welcome-graphic">
+        <button id="btn-inizia" class="btn-custom btn-giallo">INIZIA</button>
+      </div>
+    </div>
+
+    <!-- 2. INSERIMENTO NOME -->
+    <div id="screen-name-input" class="screen">
+      <div class="ui-panel panel-azzurro">
+        <img src="assets/Menu/logo_menu.png" alt="Piensalo Bien" class="panel-logo">
+        <div class="panel-content">
+          <h1 class="panel-title">MENU</h1>
+          <input type="text" id="input-username" class="custom-input" placeholder="Inserisci il tuo nome" maxlength="12" autocomplete="off">
+          <button id="btn-save-user" class="btn-custom btn-giallo btn-small">ENTRA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MENU PRINCIPALE -->
+    <div id="screen-menu" class="screen">
+      <div class="ui-panel panel-azzurro">
+        <img src="assets/Menu/logo_menu.png" alt="Piensalo Bien" class="panel-logo">
+        <div class="panel-content menu-content">
+          <h1 class="panel-title">MENU</h1>
+          <button id="btn-new-game" class="btn-menu-color btn-rosa">NUOVA PARTITA</button>
+          <button id="btn-participate" class="btn-menu-color btn-viola">PARTECIPA</button>
+          <button id="btn-rules" class="btn-menu-color btn-blu">REGOLE DEL GIOCO</button>
+        </div>
+        
+        <!-- Box Partecipa Popup -->
+        <div id="join-box" class="join-box-overlay hidden">
+          <div class="join-box-content">
+            <p class="join-box-text">Inserisci Codice Stanza</p>
+            <input type="text" id="input-roomcode" class="custom-input" placeholder="Codice" maxlength="10" autocomplete="off">
+            <button id="btn-confirm-join" class="btn-custom btn-giallo btn-small" style="margin-top: 10px;">ENTRA</button>
+            <button id="btn-cancel-join" class="btn-cancel-small">Annulla</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LOBBY -->
+    <div id="screen-lobby" class="screen">
+      <div class="ui-panel panel-rosa-lobby">
+        <div class="panel-content lobby-content">
+          <h2 class="lobby-title">Stanza: <span id="display-roomcode" class="highlight-yellow"></span></h2>
+          <div class="lobby-avatars" id="lobby-players"></div>
+          <div class="lobby-actions-row">
+            <button id="btn-start" class="btn-lobby btn-lobby-start hidden">AVVIA</button>
+            <button id="btn-leave-lobby" class="btn-lobby btn-lobby-leave">ESCI</button>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. TAVOLO DA GIOCO -->
+    <div id="screen-game" class="screen">
+      <div class="table-arena">
+        <button id="btn-menu-ingame" class="btn-top-right">MENU</button>
+
+        <div id="modal-menu" class="modal-overlay hidden">
+          <div class="modal-card">
+            <h3>Menu di Gioco</h3>
+            <button id="btn-resume" class="modal-btn">Riprendi</button>
+            <button id="btn-leave-game" class="modal-btn btn-danger">Abbandona Partita</button>
+          </div>
+        </div>
+
+        <div id="modal-jack-decision" class="modal-overlay hidden">
+          <div class="modal-card">
+            <h3>Effetto Jack 🃏</h3>
+            <p>Vuoi scambiare le due carte che hai visto?</p>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
+              <button id="btn-jack-swap" class="modal-btn" style="background: #3fb950; border: none;">Scambia</button>
+              <button id="btn-jack-keep" class="modal-btn btn-danger" style="border: none;">Non Scambiare</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="modal-q-decision" class="modal-overlay hidden">
+          <div class="modal-card">
+            <h3>Effetto Regina 👑</h3>
+            <p>Vuoi scambiare una tua carta alla cieca?</p>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
+              <button id="btn-q-use" class="modal-btn" style="background: #3fb950; border: none;">Scambia</button>
+              <button id="btn-q-skip" class="modal-btn btn-danger" style="border: none;">Salta</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="modal-jolly-decision" class="modal-overlay hidden">
+          <div class="modal-card">
+            <h3>Effetto Jolly ★</h3>
+            <p>Vuoi scambiare l'intera mano con un avversario?</p>
+            <div style="display: flex; gap: 12px; justify-content: center; margin-top: 10px;">
+              <button id="btn-jolly-use" class="modal-btn" style="background: #3fb950; border: none;">Scambia</button>
+              <button id="btn-jolly-skip" class="modal-btn btn-danger" style="border: none;">Salta</button>
+            </div>
+          </div>
+        </div>
+        
+        <div id="seat-top" class="seat top-seat hidden">
+          <div class="avatar-box">
+            <div class="avatar-circle"></div>
+            <span class="player-name">Giocatore 1</span>
+          </div>
+          <div class="cards-grid"></div>
+        </div>
+
+        <div id="seat-left" class="seat left-seat hidden">
+          <div class="avatar-box">
+            <div class="avatar-circle"></div>
+            <span class="player-name">Giocatore 1</span>
+          </div>
+          <div class="cards-grid rotated-grid-right"></div>
+        </div>
+
+        <div id="seat-right" class="seat right-seat hidden">
+          <div class="avatar-box">
+            <div class="avatar-circle"></div>
+            <span class="player-name">Giocatore 1</span>
+          </div>
+          <div class="cards-grid rotated-grid-left"></div>
+        </div>
+
+        <div id="countdown-overlay" class="modal-overlay hidden" style="background: transparent; pointer-events: none;">
+          <div id="countdown-center">3</div>
+        </div>
+
+        <div class="center-area" id="table-center-area">
+          <div id="deck" class="card-slot deck-slot">
+            
+            <small id="deck-count">52</small>
+          </div>
+          <div id="discard" class="card-slot discard-slot"></div>
+          
+          <div id="game-over-center" class="hidden">
+            <h2 id="go-title">HAI VINTO!</h2>
+            <button id="btn-return-lobby-center" class="btn-top-right" style="position:relative; right:0; top:0; margin-top:15px; background: #e04a8b; color: white;">Torna alla Lobby</button>
+          </div>
+        </div>
+
+        <div id="seat-bottom" class="seat bottom-seat">
+          <div class="avatar-box">
+            <div class="avatar-circle my-avatar"></div>
+            <span class="player-name" id="my-name">Io</span>
+          </div>
+          <div class="cards-grid" id="my-cards"></div>
+          
+          <div id="drawn-container" class="drawn-container hidden">
+            <div id="drawn-card-display" class="drawn-slot"></div>
+            <div id="discard-hint" class="hint-text">Tocca gli scarti<br>per scartarla</div>
+          </div>
+        </div>
+
+        <button id="btn-knock" class="btn-knock hidden">BUSSA!</button>
+
+        <!-- Barra Reazioni Emoticon (In basso a sinistra) -->
+        <div id="emoji-bar" class="emoji-bar">
+          <button class="emoji-btn" data-reaction="smile"><img src="assets/interazione/smile.png" alt="Smile" class="emoji-img"></button>
+          <button class="emoji-btn" data-reaction="angry"><img src="assets/interazione/angry.png" alt="Angry" class="emoji-img"></button>
+          <button class="emoji-btn" data-reaction="okay"><img src="assets/interazione/okay.png" alt="Okay" class="emoji-img"></button>
+          <button class="emoji-btn" data-reaction="high_five"><img src="assets/interazione/high_five.png" alt="High Five" class="emoji-img"></button>
+          <button class="emoji-btn" data-reaction="cup"><img src="assets/interazione/cup.png" alt="Cup" class="emoji-img"></button>
+        </div>
+
+        <!-- Overlay Risultato Piensalo Bien / Mal -->
+        <div id="match-overlay" class="match-overlay hidden">
+          <img id="match-overlay-img" class="match-overlay-banner" src="" alt="Risultato Piensalo">
+        </div>
+      </div>
+
+      <div id="toast-msg" class="toast hidden"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
