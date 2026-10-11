@@ -1,6 +1,6 @@
 const hostname = window.location.hostname;
 const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.');
-const SERVER_URL = isLocal ? `http://${hostname}:3000` : 'https://TUO-RENDER-URL.onrender.com';
+const SERVER_URL = isLocal ? `http://${hostname}:3000` : 'https://piensalo-bien-backend.onrender.com';
 
 const socket = io(SERVER_URL, { transports: ['websocket', 'polling'] });
 
